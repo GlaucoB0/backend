@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { create } from "../controllers/postagensController.js";
+import { create, getAll } from "../controllers/postagensController.js";
 
 const router = Router();
 
 router.post("/", create);
+router.get("/", getAll);
 
 export default router;
