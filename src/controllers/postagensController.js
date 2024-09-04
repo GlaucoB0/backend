@@ -1,3 +1,4 @@
+import { response } from "express";
 import { z } from "zod";
 import Postagem from "../models/postagensModel.js";
 
@@ -76,7 +77,6 @@ export const getPostagem = async (request, response) => {
 };
 
 export const updatePostagem = async (request, response) => {
-
   const { id } = request.params;
   const { titulo, conteudo, imagem } = request.body;
 
@@ -96,5 +96,23 @@ export const updatePostagem = async (request, response) => {
     response.status(200).json({ msg: "Postagem Atualizada" });
   } catch (error) {
     response.status(500).json({ msg: "Erro ao atualizar Postagem" });
+  }
+};
+
+export const deletePostagem = async (request, response) => {
+  const { id } = request.params;
+
+  try {
+    const [linhasAfetadas] = await Postagem.destroy({
+      where: { id },
+    });
+    if (linhasAfetadas === 0) {
+      response.status(404).json({ msg: "Postagem não encontrada" });
+      return;
+    }
+    response.status(200).json({ msg: "Postagem deletada" });
+  } catch (error) {
+    console.error(error)
+    response.status(500).json({ msg: "Erro ao deletar Postagem" });
   }
 };
