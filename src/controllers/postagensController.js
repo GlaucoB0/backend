@@ -55,7 +55,22 @@ export const getAll = async (request, response) => {
       postagens: postagens.rows,
     });
   } catch (error) {
-    console.error(error)
+    console.error(error);
     response.status(500).json({ msg: "Erro ao buscar postagens" });
+  }
+};
+
+export const getPostagem = async (request, response) => {
+  const { id } = request.params;
+
+  try {
+    const postagem = await Postagem.findByPk(id);
+    if (postagem === null) {
+      response.status(404).json({ msg: "Postagem não encontrada" });
+      return;
+    }
+    response.status(200).json(postagem);
+  } catch (error) {
+    response.status(500).json({ err: "Erro ao buscar postagens" });
   }
 };
